@@ -1,6 +1,9 @@
 /**/
+#include <stdio.h>
+#include <string>
 #include <ctype.h>
 #include <stdlib.h>
+#include <iostream>
 enum Token_Type {
 	EOF_TOKEN = 0,          //规定文件的结束
 	NUMERIC_TOKEN,			//当前token是数值类型的
@@ -8,7 +11,7 @@ enum Token_Type {
 	PARAN_TOKEN,			//当前token是括号
 	DEF_TOKEN				//当前token是def声明,之后是函数定义
 };
-
+FILE* file = fopen("toytest", "w+");//TODO
 static int Numeric_Val;
 static std::string Identifier_string;
 /*
@@ -45,7 +48,7 @@ static int get_token(){
 			LastChar = fgetc(file);
 		}while(isdigit(LastChar));
 
-		Nu meric_Val = strtod(NumStr.c_str(), 0);
+		float meric_Val = strtod(NumStr.c_str(), 0);
 		return NUMERIC_TOKEN;
 	}
 
@@ -66,4 +69,8 @@ static int get_token(){
 	int ThisChar = LastChar;
 	LastChar = fgetc(file);
 	return ThisChar;
+}
+
+int main(){
+	return 0;
 }
