@@ -45,3 +45,27 @@ LLVM保留字段和其他语言中的保留字段十分相似。这些关键字�
 这也展示了在这个文档中我们遵循的惯例。当演示指令时，我们将会遵循一条带注释的指令，这个注释定义生成值的类型和名字。
 ## High Level Structure
 ### Module Structure
+LLVM项目有多个模块组成，每个模块是输入程序的翻译单元。每个模块由函数，全局变量和符号表条目组成。模块可能和LLVM连接器结合在一起，他合并函数(和全局变量)定义，解决前置声明，和合并符号表条目。这里是一个“hello,world”模块的例子：
+```
+;声明一个作为全局常量的字符串常量
+@.str = private unnamed_addr constant [13 x i8] c"hello world\0A\00"
+;外部输出函数的声明
+declare i32 @puts(i8* nocapture) nounwind
+
+;main函数的定义
+define i32 @main(){ ;i32()*
+    ;转化[13 x i8]* 到 i8*...
+    %cast210 = getelementptr [13 x i8], [13 x i8]* @.str, i64 0, i64 0
+
+    ; 调用 输出函数 打印字符串到标准输出(stdout)
+    call i32 @puts(i8* %cast210)
+    ret i32 0
+}
+
+; 命名元数据
+!0 = !{i32 42, null, !"string"}
+!foo = !{!0}
+```
+这个例子由全局变量名“.str”,一个“puts”函数的外部声明，一个"main"函数定义和命名元数据“foo”组成。
+通常，一个模块是由全局值(这里函数和全局变量都是全句值)的目录组成。全局值由指向内存地址(在这里，指向一个字符的数组和一个函数)的指针体现，并且具有以下连接类型之一。
+#### Linkage Types
