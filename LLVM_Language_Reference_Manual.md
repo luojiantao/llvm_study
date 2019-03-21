@@ -81,4 +81,6 @@ define i32 @main(){ ;i32()*
 
 - available_externally(外部可用)
 
+    使用available_externally的全局连接不会进入到对应的LLVM模块的对象文件中。从连接器的角度看，一个available_externally全局和一个外部声明相等。他们的存在允许在已知的全局的定义选来进行内联和其他优化，这个定义是已知在模块外的某个地方。使用available_externally的全局连接允许随意被丢弃，允许内联和其他优化。这个链接类型只在定义中被允许，而不是声明。
     
+- linkonce(链接一次)
